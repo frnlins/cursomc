@@ -9,10 +9,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.filipelins.cursomc.domain.Categoria;
 import com.filipelins.cursomc.domain.Cidade;
+import com.filipelins.cursomc.domain.Cliente;
+import com.filipelins.cursomc.domain.Endereco;
 import com.filipelins.cursomc.domain.Estado;
 import com.filipelins.cursomc.domain.Produto;
+import com.filipelins.cursomc.domain.enums.TipoCliente;
 import com.filipelins.cursomc.repositories.CategoriaRepository;
 import com.filipelins.cursomc.repositories.CidadeRepository;
+import com.filipelins.cursomc.repositories.ClienteRepository;
+import com.filipelins.cursomc.repositories.EnderecoRepository;
 import com.filipelins.cursomc.repositories.EstadoRepository;
 import com.filipelins.cursomc.repositories.ProdutoRepository;
 
@@ -31,12 +36,45 @@ public class CursomcApplication implements CommandLineRunner {
 	@Autowired
 	private CidadeRepository cidadeRepository;
 
+	@Autowired
+	private ClienteRepository clienteRepository;
+
+	@Autowired
+	private EnderecoRepository enderecoRepository;
+
 	public static void main(String[] args) {
 		SpringApplication.run(CursomcApplication.class, args);
 	}
 
 	@Override
 	public void run(String... args) throws Exception {
+		criarCategoriaProduto();
+		Estado est1 = new Estado("Bahia");
+		Estado est2 = new Estado("Ceará");
+
+		Cidade cit1 = new Cidade("Salvador", est1);
+		Cidade cit2 = new Cidade("Fortaleza", est2);
+		Cidade cit3 = new Cidade("Jericoacoara", est2);
+
+		est1.getCidades().add(cit1);
+		est2.getCidades().addAll(Arrays.asList(cit2, cit3));
+
+		estadoRepository.saveAll(Arrays.asList(est1, est2));
+		cidadeRepository.saveAll(Arrays.asList(cit1, cit2, cit3));
+
+		Cliente cli1 = new Cliente("Joaquim Silva", "jsilva@gmail.com", "36378912377", TipoCliente.PESSOAFISICA);
+		cli1.getTelefones().addAll(Arrays.asList("27363323", "93838393"));
+
+		Endereco e1 = new Endereco("Rua Flores", "300", "Apto 203", "Jardim", "40000000", cli1, cit1);
+		Endereco e2 = new Endereco("Av. Santos Dumont", "1000", "Sala 800", "Aldeota", "60000000", cli1, cit2);
+
+		cli1.getEnderecos().addAll(Arrays.asList(e1, e2));
+
+		clienteRepository.save(cli1);
+		enderecoRepository.saveAll(Arrays.asList(e1, e2));
+	}
+
+	private void criarCategoriaProduto() {
 		Categoria cat1 = new Categoria("Informática");
 		Categoria cat2 = new Categoria("Escritório");
 
@@ -53,19 +91,5 @@ public class CursomcApplication implements CommandLineRunner {
 
 		categoriaRepository.saveAll(Arrays.asList(cat1, cat2));
 		produtoRepository.saveAll(Arrays.asList(p1, p2, p3));
-
-		Estado est1 = new Estado("Bahia");
-		Estado est2 = new Estado("Ceará");
-
-		Cidade cit1 = new Cidade("Salvador", est1);
-		Cidade cit2 = new Cidade("Fortaleza", est2);
-		Cidade cit3 = new Cidade("Jericoacoara", est2);
-
-		est1.getCidades().add(cit1);
-		est2.getCidades().addAll(Arrays.asList(cit2, cit3));
-
-		estadoRepository.saveAll(Arrays.asList(est1, est2));
-		cidadeRepository.saveAll(Arrays.asList(cit1, cit2, cit3));
 	}
-
 }

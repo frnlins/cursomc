@@ -1,6 +1,8 @@
 package com.filipelins.cursomc.resources;
 
 import java.net.URI;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.filipelins.cursomc.domain.Categoria;
+import com.filipelins.cursomc.dto.CategoriaDTO;
 import com.filipelins.cursomc.services.CategoriaService;
 
 @RestController
@@ -23,6 +26,13 @@ public class CategoriaResource {
 
 	@Autowired
 	private CategoriaService service;
+
+	@GetMapping()
+	public ResponseEntity<List<CategoriaDTO>> findAll() {
+		List<Categoria> categorias = service.findAll();
+		List<CategoriaDTO> list = categorias.stream().map(obj -> new CategoriaDTO(obj)).collect(Collectors.toList());
+		return ResponseEntity.ok(list);
+	}
 
 	@GetMapping("/{id}")
 	public ResponseEntity<Categoria> findById(@PathVariable Integer id) {
@@ -37,14 +47,14 @@ public class CategoriaResource {
 				.toUri();
 		return ResponseEntity.created(uri).build();
 	}
-	
+
 	@PutMapping("/{id}")
 	public ResponseEntity<Void> update(@PathVariable Integer id, @RequestBody Categoria categoria) {
 		categoria.setId(id);
 		categoria = service.update(categoria);
 		return ResponseEntity.noContent().build();
 	}
-	
+
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deleteById(@PathVariable Integer id) {
 		service.deleteById(id);

@@ -2,7 +2,6 @@ package com.filipelins.cursomc;
 
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -14,6 +13,7 @@ import com.filipelins.cursomc.domain.Cidade;
 import com.filipelins.cursomc.domain.Cliente;
 import com.filipelins.cursomc.domain.Endereco;
 import com.filipelins.cursomc.domain.Estado;
+import com.filipelins.cursomc.domain.ItemPedido;
 import com.filipelins.cursomc.domain.Pagamento;
 import com.filipelins.cursomc.domain.PagamentoComBoleto;
 import com.filipelins.cursomc.domain.PagamentoComCartao;
@@ -26,6 +26,7 @@ import com.filipelins.cursomc.repositories.CidadeRepository;
 import com.filipelins.cursomc.repositories.ClienteRepository;
 import com.filipelins.cursomc.repositories.EnderecoRepository;
 import com.filipelins.cursomc.repositories.EstadoRepository;
+import com.filipelins.cursomc.repositories.ItemPedidoRepository;
 import com.filipelins.cursomc.repositories.PagamentoRepository;
 import com.filipelins.cursomc.repositories.PedidoRepository;
 import com.filipelins.cursomc.repositories.ProdutoRepository;
@@ -50,12 +51,15 @@ public class CursomcApplication implements CommandLineRunner {
 
 	@Autowired
 	private EnderecoRepository enderecoRepository;
-	
+
 	@Autowired
 	private PedidoRepository pedidoRepository;
-	
+
 	@Autowired
 	private PagamentoRepository pagamentoRepository;
+	
+	@Autowired
+	private ItemPedidoRepository itemPedidoRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(CursomcApplication.class, args);
@@ -63,7 +67,22 @@ public class CursomcApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		criarCategoriaProduto();
+		Categoria cat1 = new Categoria("Informática");
+		Categoria cat2 = new Categoria("Escritório");
+
+		Produto p1 = new Produto("Computador", 2000.00);
+		Produto p2 = new Produto("Impressora", 800.00);
+		Produto p3 = new Produto("Mouse", 80.00);
+
+		cat1.getProdutos().addAll(Arrays.asList(p1, p2, p3));
+		cat2.getProdutos().add(p2);
+
+		p1.getCategorias().add(cat1);
+		p2.getCategorias().addAll(Arrays.asList(cat1, cat2));
+		p3.getCategorias().add(cat1);
+
+		categoriaRepository.saveAll(Arrays.asList(cat1, cat2));
+		produtoRepository.saveAll(Arrays.asList(p1, p2, p3));
 		
 		Estado est1 = new Estado("Bahia");
 		Estado est2 = new Estado("Ceará");
@@ -103,24 +122,18 @@ public class CursomcApplication implements CommandLineRunner {
 		
 		pedidoRepository.saveAll(Arrays.asList(ped1, ped2));
 		pagamentoRepository.saveAll(Arrays.asList(pagto1, pagto2));
-	}
-
-	private void criarCategoriaProduto() {
-		Categoria cat1 = new Categoria("Informática");
-		Categoria cat2 = new Categoria("Escritório");
-
-		Produto p1 = new Produto("Computador", 2000.00);
-		Produto p2 = new Produto("Impressora", 800.00);
-		Produto p3 = new Produto("Mouse", 80.00);
-
-		cat1.getProdutos().addAll(Arrays.asList(p1, p2, p3));
-		cat2.getProdutos().add(p2);
-
-		p1.getCategorias().add(cat1);
-		p2.getCategorias().addAll(Arrays.asList(cat1, cat2));
-		p3.getCategorias().add(cat1);
-
-		categoriaRepository.saveAll(Arrays.asList(cat1, cat2));
-		produtoRepository.saveAll(Arrays.asList(p1, p2, p3));
+		
+		ItemPedido ip1 = new ItemPedido(ped1, p1, 0.00, 1, 2000.0);
+		ItemPedido ip2 = new ItemPedido(ped1, p3, 0.00, 2, 80.0);
+		ItemPedido ip3 = new ItemPedido(ped2, p2, 100.00, 1, 800.0);
+		
+		ped1.getItens().addAll(Arrays.asList(ip1,ip2));
+		ped2.getItens().add(ip3);
+		
+		p1.getItens().add(ip1);
+		p2.getItens().add(ip3);
+		p3.getItens().add(ip2);
+		
+		itemPedidoRepository.saveAll(Arrays.asList(ip1, ip2, ip3));
 	}
 }

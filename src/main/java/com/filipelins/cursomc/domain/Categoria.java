@@ -10,10 +10,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
-import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Setter;
 
 @Data
 @Entity
@@ -24,7 +22,7 @@ public class Categoria implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private @Setter(value = AccessLevel.PROTECTED) Integer id;
+	private Integer id;
 	private String nome;
 	
 	@ManyToMany(mappedBy = "categorias")

@@ -13,12 +13,14 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.AccessLevel;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Data
 @NoArgsConstructor
+@EqualsAndHashCode(of = "id")
 public class Cidade implements Serializable {
 
 	private static final long serialVersionUID = 1L;

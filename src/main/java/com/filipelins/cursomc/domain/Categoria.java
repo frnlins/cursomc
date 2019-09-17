@@ -14,10 +14,12 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.AccessLevel;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.Setter;
 
 @Data
 @Entity
+@EqualsAndHashCode(of = "id")
 public class Categoria implements Serializable {
 
 	private static final long serialVersionUID = 1L;

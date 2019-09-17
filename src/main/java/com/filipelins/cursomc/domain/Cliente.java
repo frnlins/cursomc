@@ -19,12 +19,14 @@ import com.filipelins.cursomc.domain.enums.TipoCliente;
 
 import lombok.AccessLevel;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Data
 @NoArgsConstructor
+@EqualsAndHashCode(of = "id")
 public class Cliente implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -44,6 +46,9 @@ public class Cliente implements Serializable {
 	@ElementCollection
 	@CollectionTable(name = "TELEFONE")
 	private Set<String> telefones = new HashSet<>();
+	
+	@OneToMany(mappedBy = "cliente")
+	private List<Pedido> pedidos = new ArrayList<>();
 
 	public Cliente(String nome, String email, String cpfOuCnpj, TipoCliente tipoCliente) {
 		super();

@@ -17,11 +17,9 @@ import javax.persistence.OneToMany;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.filipelins.cursomc.domain.enums.TipoCliente;
 
-import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Data
@@ -33,7 +31,7 @@ public class Cliente implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private @Setter(value = AccessLevel.PROTECTED) Integer id;
+	private Integer id;
 	private String nome;
 	private String email;
 	private String cpfOuCnpj;
@@ -64,5 +62,11 @@ public class Cliente implements Serializable {
 
 	public void setTipoCliente(TipoCliente tipoCliente) {
 		this.tipoCliente = tipoCliente.getCodigo();
+	}
+
+	public Cliente(Integer id, String nome, String email) {
+		this.id = id;
+		this.nome = nome;
+		this.email = email;
 	}
 }

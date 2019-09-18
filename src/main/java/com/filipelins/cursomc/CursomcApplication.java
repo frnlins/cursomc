@@ -70,8 +70,8 @@ public class CursomcApplication implements CommandLineRunner {
 		Categoria cat1 = new Categoria("Informática");
 		Categoria cat2 = new Categoria("Escritório");
 		Categoria cat3 = new Categoria("Cozinha");
-		Categoria cat4 = new Categoria("Eletrônicos");
-		Categoria cat5 = new Categoria("Casa");
+		Categoria cat4 = new Categoria("Jogos");
+		Categoria cat5 = new Categoria("Eletrodomésticos");
 		Categoria cat6 = new Categoria("Jardim");
 		Categoria cat7 = new Categoria("Decoração");
 		Categoria cat8 = new Categoria("Perfumaria");

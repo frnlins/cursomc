@@ -27,7 +27,7 @@ public class ClienteService {
 		return obj.orElseThrow(() -> new ObjectNotFoundException(
 				"Objeto não encontrado! Id: " + id + ", Tipo: " + Cliente.class.getName()));
 	}
-	
+
 	public List<Cliente> findAll() {
 		return repo.findAll();
 	}
@@ -52,11 +52,11 @@ public class ClienteService {
 			throw new DataIntegrityException("Não é possível excluir porque há entidades relacionadas");
 		}
 	}
-	
+
 	public Cliente fromDTO(ClienteDTO objDTO) {
-		return new Cliente(objDTO.getId(), objDTO.getNome(),objDTO.getEmail());
+		return new Cliente(objDTO.getId(), objDTO.getNome(), objDTO.getEmail());
 	}
-	
+
 	private void updateData(Cliente currentCliente, Cliente cliente) {
 		currentCliente.setNome(cliente.getNome());
 		currentCliente.setEmail(cliente.getEmail());

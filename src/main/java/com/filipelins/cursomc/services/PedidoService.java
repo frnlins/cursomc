@@ -33,10 +33,10 @@ public class PedidoService {
 
 	@Autowired
 	private ItemPedidoRepository itemPedidoRepository;
-	
+
 	@Autowired
 	private ClienteService clienteService;
-	
+
 	@Autowired
 	private EmailService emailService;
 
@@ -69,8 +69,8 @@ public class PedidoService {
 		}
 
 		itemPedidoRepository.saveAll(pedido.getItens());
-		//Desabilitado para não mandar e-mails
-		emailService.sendOrderConfirmationEmail(pedido);
+		// Desabilitado para não mandar e-mails
+		// emailService.sendOrderConfirmationHtmlEmail(pedido);
 		return pedido;
 	}
 }

@@ -20,6 +20,7 @@ import com.filipelins.cursomc.domain.PagamentoComCartao;
 import com.filipelins.cursomc.domain.Pedido;
 import com.filipelins.cursomc.domain.Produto;
 import com.filipelins.cursomc.domain.enums.EstadoPagamento;
+import com.filipelins.cursomc.domain.enums.Perfil;
 import com.filipelins.cursomc.domain.enums.TipoCliente;
 import com.filipelins.cursomc.repositories.CategoriaRepository;
 import com.filipelins.cursomc.repositories.CidadeRepository;
@@ -36,7 +37,7 @@ public class DBService {
 
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
-	
+
 	@Autowired
 	private CategoriaRepository categoriaRepository;
 
@@ -122,16 +123,24 @@ public class DBService {
 		estadoRepository.saveAll(Arrays.asList(est1, est2));
 		cidadeRepository.saveAll(Arrays.asList(cit1, cit2, cit3));
 
-		Cliente cli1 = new Cliente("Joaquim Silva", "jsilva@gmail.com", "36378912377", TipoCliente.PESSOAFISICA, bCryptPasswordEncoder.encode("123"));
+		Cliente cli1 = new Cliente("Joaquim Silva", "jsilva@gmail.com", "36378912377", TipoCliente.PESSOAFISICA,
+				bCryptPasswordEncoder.encode("123"));
 		cli1.getTelefones().addAll(Arrays.asList("27363323", "93838393"));
+
+		Cliente cli2 = new Cliente("Gabriela Cravo", "gcravo@gmail.com", "58471154072", TipoCliente.PESSOAFISICA,
+				bCryptPasswordEncoder.encode("123"));
+		cli2.getTelefones().addAll(Arrays.asList("33232736", "83939383"));
+		cli2.addPerfil(Perfil.ADMIN);
 
 		Endereco e1 = new Endereco("Rua Flores", "300", "Apto 203", "Jardim", "40000000", cli1, cit1);
 		Endereco e2 = new Endereco("Av. Santos Dumont", "1000", "Sala 800", "Aldeota", "60000000", cli1, cit2);
+		Endereco e3 = new Endereco("Av. ACM", "1500", "apto 200", "Boca do Rio", "40000001", cli2, cit1);
 
 		cli1.getEnderecos().addAll(Arrays.asList(e1, e2));
+		cli2.getEnderecos().add(e3);
 
-		clienteRepository.save(cli1);
-		enderecoRepository.saveAll(Arrays.asList(e1, e2));
+		clienteRepository.saveAll(Arrays.asList(cli1, cli2));
+		enderecoRepository.saveAll(Arrays.asList(e1, e2, e3));
 
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 		Pedido ped1 = new Pedido(sdf.parse("30/09/2017 10:32"), cli1, e1);

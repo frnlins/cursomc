@@ -75,7 +75,6 @@ public class PedidoService {
 		}
 
 		itemPedidoRepository.saveAll(pedido.getItens());
-		// Desabilitado para não mandar e-mails
 		emailService.sendOrderConfirmationHtmlEmail(pedido);
 		return pedido;
 	}

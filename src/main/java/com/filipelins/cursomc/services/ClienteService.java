@@ -1,5 +1,6 @@
 package com.filipelins.cursomc.services;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,6 +12,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.filipelins.cursomc.domain.Cidade;
 import com.filipelins.cursomc.domain.Cliente;
@@ -37,6 +39,9 @@ public class ClienteService {
 
 	@Autowired
 	private EnderecoRepository enderecoRepository;
+	
+	@Autowired
+	private S3Service s3Service;
 
 	public Cliente findById(Integer id) {
 		
@@ -80,6 +85,10 @@ public class ClienteService {
 		} catch (DataIntegrityViolationException e) {
 			throw new DataIntegrityException("Não é possível excluir porque há pedidos relacionados");
 		}
+	}
+	
+	public URI uploadProfilePicture(MultipartFile multipartFile) {
+		return s3Service.uploadFile(multipartFile);
 	}
 
 	public Cliente fromDTO(ClienteDTO objDTO) {
